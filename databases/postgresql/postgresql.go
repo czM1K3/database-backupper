@@ -18,7 +18,7 @@ func CheckVariables() {
 
 func DoBackup(dir string) {
 	postgresqluri := os.Getenv(PostgreSQLURI)
-	cmd := exec.Command("pg_dump", "--dbname=\""+postgresqluri+"\"", "--file=\""+dir+"\"")
+	cmd := exec.Command("pg_dump", "--dbname=\""+postgresqluri+"\"", "--file=\""+dir+"/backup.sql\"")
 	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
