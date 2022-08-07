@@ -26,16 +26,16 @@ func main() {
 	default:
 		mongodb.CheckVariables()
 	}
-	jobType := os.Getenv("JOB_TYPE")
-	if jobType == "CRON" {
-		interval := os.Getenv("INTERVAL")
+	interval := os.Getenv("CRON_INTERVAL")
+	if interval != "" {
 		re := regexp.MustCompile(`^(\*|([0-9]|1[0-9]|2[0-9]|3[0-9]|4[0-9]|5[0-9])|\*\/([0-9]|1[0-9]|2[0-9]|3[0-9]|4[0-9]|5[0-9])) (\*|([0-9]|1[0-9]|2[0-3])|\*\/([0-9]|1[0-9]|2[0-3])) (\*|([1-9]|1[0-9]|2[0-9]|3[0-1])|\*\/([1-9]|1[0-9]|2[0-9]|3[0-1])) (\*|([1-9]|1[0-2])|\*\/([1-9]|1[0-2])) (\*|([0-6])|\*\/([0-6]))$`)
 		if re.MatchString(interval) {
+			fmt.Println("Starting cron with interval: " + interval)
 			s := gocron.NewScheduler(time.Local)
 			s.Cron(interval).Do(runBackup)
 			s.StartBlocking()
 		} else {
-			log.Fatal("INTERVAL is not valid")
+			log.Fatal("CRON_INTERVAL is not valid")
 		}
 	} else {
 		runBackup()
