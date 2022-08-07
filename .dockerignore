@@ -1,0 +1,5 @@
+backup
+readme.md
+.git
+.dockerignore
+Dockerfile*
