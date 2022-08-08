@@ -1,4 +1,4 @@
-package folders
+package path
 
 import (
 	"fmt"
@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-func MakeBackupDir() string {
+func MakeBackupPath(createFolder bool) string {
 	currentTime := time.Now().Format("2006-01-02-15-04-05")
 	fmt.Println("Creating folder: " + currentTime)
 	path := os.Getenv("BACKUP_PATH")
@@ -16,7 +16,9 @@ func MakeBackupDir() string {
 	} else {
 		path = path + "/" + currentTime
 	}
-	cmd := exec.Command("mkdir", "-p", path)
-	cmd.Start()
+	if createFolder {
+		cmd := exec.Command("mkdir", "-p", path)
+		cmd.Start()
+	}
 	return path
 }

@@ -8,14 +8,16 @@ import (
 	"time"
 
 	"github.com/czM1K3/database-backupper/databases/mongodb"
+	"github.com/czM1K3/database-backupper/databases/mysql"
 	"github.com/czM1K3/database-backupper/databases/postgresql"
-	"github.com/czM1K3/database-backupper/folders"
+	"github.com/czM1K3/database-backupper/path"
 	"github.com/go-co-op/gocron"
 )
 
 const (
-	MongoDB    string = "MONGODB"
-	PostgreSQL        = "POSTGRES"
+	MongoDB    = "MONGODB"
+	PostgreSQL = "POSTGRES"
+	MySQL      = "MYSQL"
 )
 
 func main() {
@@ -23,6 +25,8 @@ func main() {
 	switch dbType {
 	case PostgreSQL:
 		postgresql.CheckVariables()
+	case MySQL:
+		mysql.CheckVariables()
 	default:
 		mongodb.CheckVariables()
 	}
@@ -44,12 +48,17 @@ func main() {
 
 func runBackup() {
 	fmt.Println("Starting backup")
-	dir := folders.MakeBackupDir()
+
 	dbType := os.Getenv("DB_TYPE")
 	switch dbType {
 	case PostgreSQL:
+		dir := path.MakeBackupPath(false)
 		postgresql.DoBackup(dir)
+	case MySQL:
+		dir := path.MakeBackupPath(false)
+		mysql.DoBackup(dir)
 	default:
+		dir := path.MakeBackupPath(true)
 		mongodb.DoBackup(dir)
 	}
 	fmt.Println("Backup done")

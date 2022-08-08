@@ -7,12 +7,12 @@ import (
 )
 
 const (
-	MongoDBURI string = "MONGODB_URI"
+	MongoDBURI = "MONGODB_URI"
 )
 
 func CheckVariables() {
 	if os.Getenv(MongoDBURI) == "" {
-		log.Fatal("MONGODB_URI is not defined")
+		log.Fatal(MongoDBURI + " is not defined")
 	}
 }
 
